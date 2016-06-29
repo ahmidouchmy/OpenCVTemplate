@@ -45,6 +45,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,6 +70,11 @@ import com.qualcomm.robotcore.util.Dimmer;
 import com.qualcomm.robotcore.util.ImmersiveMode;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -98,6 +104,7 @@ public class FtcRobotControllerActivity extends Activity {
   protected TextView[] textGamepad = new TextView[NUM_GAMEPADS];
   protected TextView textOpMode;
   protected TextView textErrorMessage;
+  public static CameraBridgeViewBase mOpenCvCameraView;
   protected ImmersiveMode immersion;
 
   protected UpdateUI updateUI;
@@ -116,6 +123,27 @@ public class FtcRobotControllerActivity extends Activity {
     }
 
   }
+  @Override
+  public void onDestroy(){
+    super.onDestroy();
+    if (mOpenCvCameraView != null)
+      mOpenCvCameraView.disableView();
+  }
+  public BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+    @Override
+    public void onManagerConnected(int status) {
+      switch (status) {
+        case LoaderCallbackInterface.SUCCESS:
+        {
+//          mOpenCvCameraView.enableView();
+        } break;
+        default:
+        {
+          super.onManagerConnected(status);
+        } break;
+      }
+    }
+  };
 
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
@@ -168,7 +196,11 @@ public class FtcRobotControllerActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    if (!OpenCVLoader.initDebug()) {
+      Log.e(this.getClass().getSimpleName(), "  OpenCVLoader.initDebug(), not working.");
+    } else {
+      Log.d(this.getClass().getSimpleName(), "  OpenCVLoader.initDebug(), working.");
+    }
     receivedUsbAttachmentNotifications = new ConcurrentLinkedQueue<UsbDevice>();
     eventLoop = null;
 
@@ -184,6 +216,7 @@ public class FtcRobotControllerActivity extends Activity {
         openOptionsMenu();
       }
     });
+    mOpenCvCameraView=(CameraBridgeViewBase)findViewById(R.id.camerapreview);
 
     textDeviceName = (TextView) findViewById(R.id.textDeviceName);
     textWifiDirectStatus = (TextView) findViewById(R.id.textWifiDirectStatus);
@@ -242,11 +275,14 @@ public class FtcRobotControllerActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
+    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, context, mLoaderCallback);
   }
 
   @Override
   public void onPause() {
     super.onPause();
+    if (mOpenCvCameraView != null)
+      mOpenCvCameraView.disableView();
   }
 
   @Override

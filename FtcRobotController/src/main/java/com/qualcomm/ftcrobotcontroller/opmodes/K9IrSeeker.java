@@ -143,7 +143,6 @@ public class K9IrSeeker extends OpMode {
                  */
                 left = -MOTOR_POWER;
                 right = MOTOR_POWER;
-
             } else if (angle < -5) {
                 // turn to the left and move forward.
                 left = MOTOR_POWER - 0.05;

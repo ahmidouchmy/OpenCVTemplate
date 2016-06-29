@@ -71,7 +71,7 @@ public class MRRGBExample extends LinearOpMode {
 
     // turn the LED on in the beginning, just so user will know that the sensor is active.
     sensorRGB.enableLed(true);
-
+    sensorRGB.argb();
     // wait one cycle.
     waitOneFullHardwareCycle();
 

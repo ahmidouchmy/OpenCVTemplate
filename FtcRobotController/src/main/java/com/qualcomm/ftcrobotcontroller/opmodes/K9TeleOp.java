@@ -31,10 +31,40 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.exception.RobotCoreException;
+import com.qualcomm.robotcore.hardware.AccelerationSensor;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.AnalogInputController;
+import com.qualcomm.robotcore.hardware.AnalogOutput;
+import com.qualcomm.robotcore.hardware.AnalogOutputController;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.DeviceManager;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DigitalChannelController;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.I2cController;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.IrSeekerSensor;
+import com.qualcomm.robotcore.hardware.LED;
+import com.qualcomm.robotcore.hardware.LegacyModule;
+import com.qualcomm.robotcore.hardware.LightSensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.TouchSensorMultiplexer;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.SerialNumber;
+
+import java.util.Map;
 
 /**
  * TeleOp Mode
@@ -107,8 +137,8 @@ public class K9TeleOp extends OpMode {
 		motorLeft = hardwareMap.dcMotor.get("motor_1");
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
-		arm = hardwareMap.servo.get("servo_1");
-		claw = hardwareMap.servo.get("servo_6");
+		arm = hardwareMap.servo.get("neck");
+		claw = hardwareMap.servo.get("head");
 
 		// assign the starting position of the wrist and claw
 		armPosition = 0.2;
@@ -127,8 +157,9 @@ public class K9TeleOp extends OpMode {
 		 * Gamepad 1
 		 *
 		 * Gamepad 1 controls the motors via the left stick, and it controls the
-		 * wrist/claw via the a,b, x, y buttons
+		 * wrist/claw via the a,b, x, y buttons bick boi
 		 */
+
 
 		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
 		// 1 is full down
@@ -142,6 +173,160 @@ public class K9TeleOp extends OpMode {
 		// clip the right/left values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
+//		LegacyModule module=hardwareMap.legacyModule.get("legacy");
+//		module.enable9v(4,true);
+//		DeviceManager manager=new DeviceManager() {
+//			@Override
+//			public Map<SerialNumber, DeviceType> scanForUsbDevices() throws RobotCoreException {
+//				return null;
+//			}
+//
+//			@Override
+//			public DcMotorController createUsbDcMotorController(SerialNumber serialNumber) throws RobotCoreException, InterruptedException {
+//				return null;
+//			}
+//
+//			@Override
+//			public DcMotor createDcMotor(DcMotorController dcMotorController, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public ServoController createUsbServoController(SerialNumber serialNumber) throws RobotCoreException, InterruptedException {
+//				return null;
+//			}
+//
+//			@Override
+//			public Servo createServo(ServoController servoController, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public LegacyModule createUsbLegacyModule(SerialNumber serialNumber) throws RobotCoreException, InterruptedException {
+//				return null;
+//			}
+//
+//			@Override
+//			public DeviceInterfaceModule createDeviceInterfaceModule(SerialNumber serialNumber) throws RobotCoreException, InterruptedException {
+//				return null;
+//			}
+//
+//			@Override
+//			public TouchSensor createNxtTouchSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public TouchSensorMultiplexer createNxtTouchSensorMultiplexer(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public AnalogInput createAnalogInputDevice(AnalogInputController analogInputController, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public AnalogOutput createAnalogOutputDevice(AnalogOutputController analogOutputController, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public DigitalChannel createDigitalChannelDevice(DigitalChannelController digitalChannelController, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public PWMOutput createPwmOutputDevice(DeviceInterfaceModule deviceInterfaceModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public I2cDevice createI2cDevice(I2cController i2cController, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public DcMotorController createNxtDcMotorController(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public ServoController createNxtServoController(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public CompassSensor createNxtCompassSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public TouchSensor createDigitalTouchSensor(DeviceInterfaceModule deviceInterfaceModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public AccelerationSensor createNxtAccelerationSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public LightSensor createNxtLightSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public IrSeekerSensor createNxtIrSeekerSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public IrSeekerSensor createI2cIrSeekerSensorV3(DeviceInterfaceModule deviceInterfaceModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public UltrasonicSensor createNxtUltrasonicSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public GyroSensor createNxtGyroSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public GyroSensor createModernRoboticsI2cGyroSensor(DeviceInterfaceModule deviceInterfaceModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public OpticalDistanceSensor createAnalogOpticalDistanceSensor(DeviceInterfaceModule deviceInterfaceModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public ColorSensor createAdafruitI2cColorSensor(DeviceInterfaceModule deviceInterfaceModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public ColorSensor createNxtColorSensor(LegacyModule legacyModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public ColorSensor createModernRoboticsI2cColorSensor(DeviceInterfaceModule deviceInterfaceModule, int i) {
+//				return null;
+//			}
+//
+//			@Override
+//			public LED createLED(DigitalChannelController digitalChannelController, int i) {
+//				return null;
+//			}
+//		};
+//		UltrasonicSensor ultra=manager.createNxtUltrasonicSensor(module,4);
 
 		// scale the joystick value to make it easier to control
 		// the robot more precisely at slower speeds.
@@ -149,9 +334,9 @@ public class K9TeleOp extends OpMode {
 		left =  (float)scaleInput(left);
 
 		// write the values to the motors
-		motorRight.setPower(right);
-		motorLeft.setPower(left);
-
+		motorRight.setPower(right/2);
+		motorLeft.setPower(left/2);
+ 
 		// update the position of the arm.
 		if (gamepad1.a) {
 			// if the A button is pushed on gamepad1, increment the position of
