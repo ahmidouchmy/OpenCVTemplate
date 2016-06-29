@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ftc_app
 FTC Android Studio project to create FTC Robot Controller app.
 
@@ -150,3 +151,7 @@ In this latest version of the FTC SDK (20150803_001) the following changes shoul
 
 T. Eng
 August 3, 2015
+=======
+# OpenCVTemplate
+This is a template for using OpenCV with the ZTE Speed in the FTC app. It has all libraries and gradle files correctly configured for API 19. 
+>>>>>>> b3005b6e225b59909264bccaab5a566ec370be2b
